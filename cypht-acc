@@ -1,0 +1,82 @@
+#!/bin/bash
+function do_help()
+{
+    cat <<HELP
+$(basename $0) - Cypht account management
+
+Tool for managing accounts.
+
+$0 new <username> [<password>]
+    Creates new Cypht account. If password is not given, a 16-character
+    random password is generated. In any case, the user's password is echoed
+    back on standard output.
+
+$0 rm <username>
+    Removes the Cypht account for the given username.
+
+$0 passwd <username> [<password>]
+    Changes the password of the given Cypht username. If password is not
+    given, a 16-character random password is generated. The user's password is
+    echoed back on standard output.
+HELP
+    exit 0
+}
+
+
+function exit_error()
+{
+    echo "FATAL -- $1"
+    echo "Invoke \`$0 help' for further info."
+    exit 1
+}
+
+
+function check_username()
+{
+    if [ -z "$username" ]; then
+        exit_error "Must set username argument."
+    fi
+}
+
+
+function get_password()
+{
+    if [ -n "$1" ]; then
+        echo $1
+    else
+        pwgen -n 16
+    fi
+}
+
+
+cmd="$1"
+shift
+username="$1"
+password=$(get_password "$2")
+echo_password=
+case "$cmd" in
+    new)
+        check_username
+        script="create_account"
+        ;;
+    rm)
+        check_username
+        script="delete_account"
+        echo_password=no
+        ;;
+    passwd)
+        check_username
+        script="update_password"
+        ;;
+    help|"")
+        do_help
+        ;;
+    *)
+        exit_error "Unknown command \`$cmd'."
+        ;;
+esac
+( \
+    php /usr/local/share/cypht/scripts/$script.php "$username" "$password" \
+    | awk '/An error occured/{exit 1}' \
+    ) \
+    && (test -n "$echo_password" || echo "$password")
