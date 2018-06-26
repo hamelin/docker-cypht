@@ -4,7 +4,7 @@ mkdir -p $DEST && \
     chmod 755 $DEST && \
     DIR_TEMP=$(mktemp -d) && \
     pushd $DIR_TEMP && \
-    wget https://github.com/jasonmunro/cypht/archive/master.zip && \
+    wget https://github.com/jasonmunro/cypht/archive/master.zip 2>&1 && \
     unzip master.zip && \
     find . -type d -exec chmod 755 {} \; && \
     find . -type f -exec chmod 644 {} \; && \
