@@ -1,14 +1,17 @@
 FROM debian:9.4
 
-RUN apt update -y && apt install -y php php-curl apache2
-RUN apt install -y wget bash unzip php-sqlite3
+RUN apt update -y && apt install -y \
+    apache2 \
+    bash \
+    php \
+    php-curl \
+    php-mbstring \
+    php-sqlite3 \
+    unzip \
+    wget
 
 COPY deploy-code.sh .
 RUN bash deploy-code.sh && rm deploy-code.sh
-
-RUN apt install -y sqlite3
-RUN apt install -y less man xxd vim
-RUN apt install -y php-mbstring
 
 COPY hm3.ini /usr/local/share/cypht/hm3.ini
 RUN chmod 644 /usr/local/share/cypht/hm3.ini
