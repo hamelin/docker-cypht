@@ -11,8 +11,8 @@ RUN apt update -y && apt install -y \
     unzip \
     wget
 
-COPY deploy-code.sh .
-RUN bash deploy-code.sh && rm deploy-code.sh
+RUN mkdir -p /usr/local/share && chmod 755 /usr/local/share
+COPY --chown="root:www-data" cypht /usr/local/share/cypht
 
 COPY hm3.ini /usr/local/share/cypht/hm3.ini
 RUN chmod 644 /usr/local/share/cypht/hm3.ini

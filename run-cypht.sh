@@ -35,5 +35,6 @@ rm -f /var/www/html/cypht
 ln -s /usr/local/share/cypht/site /var/www/html/cypht
 service apache2 start
 
-echo "Ready!"
-cat /dev/full
+echo "*** Ready! ***"
+echo "(tailing HTTPD/PHP errors from here)"
+tail -f /var/log/apache2/error.log
