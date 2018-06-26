@@ -7,6 +7,7 @@ RUN apt update -y && apt install -y \
     php-curl \
     php-mbstring \
     php-sqlite3 \
+    sqlite3 \
     unzip \
     wget
 
